@@ -8,11 +8,13 @@ const RotaProtegida = ({ children }) => {
   // Add a request interceptor
   AXIOS.interceptors.request.use(
     function (config) {
+      // Any satus code that lie within the range of 2x1 cause this function to tigger 
       // Do something before request is sent
       config.headers.Authorization = `Bearer ${token}`
       return config;
     },
     function (error) {
+      // Any satus code that falls outside the range of 2x1 cause this function to tigger 
       // Do something with request error
       if(error.status == 401){
         navigate("/");
