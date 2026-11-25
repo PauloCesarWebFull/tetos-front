@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query"
 import { AXIOS, QUERYCLIENT } from "../services";
 
 export const useBuscarLocatario = () => {
@@ -6,7 +6,7 @@ export const useBuscarLocatario = () => {
         queryKey: ["locatarios"],
         queryFn: async () => {
             const res = await AXIOS.get("/locatarios");
-            return res.data
+            return res.data;
         }
     });
 }
@@ -19,7 +19,7 @@ export const useCriarLocatario = () => {
         },
         onSuccess: () => {
             QUERYCLIENT.invalidateQueries({
-                queryKey: ["locatarios"] 
+                queryKey: ["locatarios"]
             })
         }
     })
@@ -28,12 +28,12 @@ export const useCriarLocatario = () => {
 export const useEditarLocatario = () => {
     return useMutation({
         mutationFn: async (dados) => {
-            const res = await AXIOS.put(`/locatarios${dados.id}`, dados);
+            const res = await AXIOS.put(`/locatarios/${dados.id}`, dados);
             return res.data;
         },
         onSuccess: () => {
             QUERYCLIENT.invalidateQueries({
-                queryKey: ["locatarios"] 
+                queryKey: ["locatarios"]
             })
         }
     })
@@ -42,12 +42,12 @@ export const useEditarLocatario = () => {
 export const useDeletarLocatario = () => {
     return useMutation({
         mutationFn: async (id) => {
-            const res = await AXIOS.delete(`/locatarios${id}`);
+            const res = await AXIOS.delete(`/locatarios/${id}`);
             return res.data;
         },
         onSuccess: () => {
             QUERYCLIENT.invalidateQueries({
-                queryKey: ["locatarios"] 
+                queryKey: ["locatarios"]
             })
         }
     })

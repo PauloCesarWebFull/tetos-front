@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query"
 import { AXIOS, QUERYCLIENT } from "../services";
 
 export const useBuscarImoveisTipo = () => {
@@ -6,7 +6,7 @@ export const useBuscarImoveisTipo = () => {
         queryKey: ["imoveis-tipo"],
         queryFn: async () => {
             const res = await AXIOS.get("/imoveis-tipo");
-            return res.data
+            return res.data;
         }
     });
 }
@@ -19,7 +19,7 @@ export const useCriarImoveisTipo = () => {
         },
         onSuccess: () => {
             QUERYCLIENT.invalidateQueries({
-                queryKey: ["imoveis-tipo"] 
+                queryKey: ["imoveis-tipo"]
             })
         }
     })
@@ -28,12 +28,12 @@ export const useCriarImoveisTipo = () => {
 export const useEditarImoveisTipo = () => {
     return useMutation({
         mutationFn: async (dados) => {
-            const res = await AXIOS.put(`/imoveis-tipo${dados.id}`, dados);
+            const res = await AXIOS.put(`/imoveis-tipo/${dados.id}`, dados);
             return res.data;
         },
         onSuccess: () => {
             QUERYCLIENT.invalidateQueries({
-                queryKey: ["imoveis-tipo"] 
+                queryKey: ["imoveis-tipo"]
             })
         }
     })
@@ -42,12 +42,12 @@ export const useEditarImoveisTipo = () => {
 export const useDeletarImoveisTipo = () => {
     return useMutation({
         mutationFn: async (id) => {
-            const res = await AXIOS.delete(`/imoveis-tipo${id}`);
+            const res = await AXIOS.delete(`/imoveis-tipo/${id}`);
             return res.data;
         },
         onSuccess: () => {
             QUERYCLIENT.invalidateQueries({
-                queryKey: ["imoveis-tipo"] 
+                queryKey: ["imoveis-tipo"]
             })
         }
     })

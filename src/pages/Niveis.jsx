@@ -3,17 +3,18 @@ import { LuPencil, LuPlus, LuTrash2 } from "react-icons/lu";
 import { useBuscarNiveis, useCriarNivel, useDeletarNivel, useEditarNivel } from "../hooks/niveisHooks";
 import { useState } from "react";
 
+
 const Niveis = () => {
 
     const [mostrarCriar, setMostrarCriar] = useState(false);
     const [mostrarEditar, setMostrarEditar] = useState(false);
     const { notification } = App.useApp();
     const { data: niveis, isLoading: loadingNiveis } = useBuscarNiveis();
-    const { mutate: criarNivel, isLoading: loadingCriar} = useCriarNivel();
-    const { mutate: editarNivel, isLoading: loadingEditar} = useEditarNivel();
+    const { mutate: criarNivel, isLoading: loadingCriar } = useCriarNivel();
+    const { mutate: editarNivel, isLoading: loadingEditar } = useEditarNivel();
     const { mutate: deletarNivel } = useDeletarNivel();
     const [formEditar] = Form.useForm();
-    
+
     function criar(dados){
         criarNivel(dados, {
             onSuccess: ({ type, description }) => {
@@ -23,7 +24,7 @@ const Niveis = () => {
                     placement: "bottomRight"
                 })
             },
-            onError: ({ response: { data: { type, description} } }) => {
+            onError: ({ response: { data: { type, description } } }) => {
                 notification[type]({
                     description
                 });
@@ -31,7 +32,7 @@ const Niveis = () => {
         })
     }
 
-function editar({dados}){
+    function editar(dados){
         editarNivel(dados, {
             onSuccess: ({ type, description }) => {
                 setMostrarEditar(false);
@@ -40,7 +41,7 @@ function editar({dados}){
                     placement: "bottomRight"
                 })
             },
-            onError: ({ response: { data: { type, description} } }) => {
+            onError: ({ response: { data: { type, description } } }) => {
                 notification[type]({
                     description
                 });
@@ -56,7 +57,7 @@ function editar({dados}){
                     placement: "bottomRight"
                 })
             },
-            onError: ({ response: { data: { type, description} } }) => {
+            onError: ({ response: { data: { type, description } } }) => {
                 notification[type]({
                     description
                 });
@@ -64,24 +65,24 @@ function editar({dados}){
         })
     }
 
-    return ( 
+    return (
         <div>
             <div className="flex justify-between items-center mb-4">
-                <h2 className="text-3-1 font-bold">Niveis</h2>
+                <h2 className="text-3xl font-bold">Níveis</h2>
                 <Button
                     type="primary"
                     icon={<LuPlus />}
                     onClick={() => setMostrarCriar(true)}
-                >Novo nivel</Button>
+                >Novo nível</Button>
             </div>
 
             <div>
-                <Table 
+                <Table
                     dataSource={niveis || []}
-                    loading = {loadingNiveis}
+                    loading={loadingNiveis}
                     rowKey={"id"}
                 >
-                    <Table.Column 
+                    <Table.Column
                         title="Nome"
                         dataIndex="nome"
                     />
@@ -100,20 +101,19 @@ function editar({dados}){
                                     }}
                                 />
                                 <Popconfirm
-                                    tittle="Aviso:"
+                                    title="Aviso:"
                                     description="Deseja realmente apagar?"
                                     okText="Sim"
                                     cancelText="Não"
                                     onConfirm={() => deletar(linha.id)}
                                 >
-                                    <Button 
+                                    <Button
                                         icon={<LuTrash2 />}
                                         type="primary"
                                     />
-
                                 </Popconfirm>
                             </div>
-                        )} 
+                        )}
                     />
                 </Table>
             </div>
@@ -130,7 +130,7 @@ function editar({dados}){
                     <Form.Item
                         label="Nome"
                         name="nome"
-                        rules={[{ required: true, message: "Campo obrigatório " }]}
+                        rules={[{ required: true, message: "Campo obrigatório" }]}
                     >
                         <Input placeholder="nome do nível" />
                     </Form.Item>
@@ -144,7 +144,7 @@ function editar({dados}){
                         </Button>
                     </div>
                 </Form>
-            </Drawer>      
+            </Drawer>
 
             <Drawer
                 title="Editar"
@@ -156,7 +156,6 @@ function editar({dados}){
                     onFinish={editar}
                     form={formEditar}
                 >
-
                     <Form.Item
                         name="id"
                         hidden
@@ -166,7 +165,7 @@ function editar({dados}){
                     <Form.Item
                         label="Nome"
                         name="nome"
-                        rules={[{ required: true, message: "Campo obrigatório " }]}
+                        rules={[{ required: true, message: "Campo obrigatório" }]}
                     >
                         <Input placeholder="nome do nível" />
                     </Form.Item>
@@ -180,9 +179,9 @@ function editar({dados}){
                         </Button>
                     </div>
                 </Form>
-            </Drawer>       
+            </Drawer>
         </div>
     );
 }
- 
+
 export default Niveis;

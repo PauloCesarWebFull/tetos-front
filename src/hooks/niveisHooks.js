@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query"
 import { AXIOS, QUERYCLIENT } from "../services";
 
 export const useBuscarNiveis = () => {
@@ -6,7 +6,7 @@ export const useBuscarNiveis = () => {
         queryKey: ["niveis"],
         queryFn: async () => {
             const res = await AXIOS.get("/niveis");
-            return res.data
+            return res.data;
         }
     });
 }
@@ -19,7 +19,7 @@ export const useCriarNivel = () => {
         },
         onSuccess: () => {
             QUERYCLIENT.invalidateQueries({
-                queryKey: ["niveis"] 
+                queryKey: ["niveis"]
             })
         }
     })
@@ -28,12 +28,12 @@ export const useCriarNivel = () => {
 export const useEditarNivel = () => {
     return useMutation({
         mutationFn: async (dados) => {
-            const res = await AXIOS.put(`/niveis${dados.id}`, dados);
+            const res = await AXIOS.put(`/niveis/${dados.id}`, dados);
             return res.data;
         },
         onSuccess: () => {
             QUERYCLIENT.invalidateQueries({
-                queryKey: ["niveis"] 
+                queryKey: ["niveis"]
             })
         }
     })
@@ -42,12 +42,12 @@ export const useEditarNivel = () => {
 export const useDeletarNivel = () => {
     return useMutation({
         mutationFn: async (id) => {
-            const res = await AXIOS.delete(`/niveis${id}`);
+            const res = await AXIOS.delete(`/niveis/${id}`);
             return res.data;
         },
         onSuccess: () => {
             QUERYCLIENT.invalidateQueries({
-                queryKey: ["niveis"] 
+                queryKey: ["niveis"]
             })
         }
     })

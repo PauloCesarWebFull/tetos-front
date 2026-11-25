@@ -6,7 +6,7 @@ import Niveis from "../pages/Niveis";
 import PageLayout from "../layouts/PageLayout";
 import { useContext } from "react";
 import { AdminContext } from "../contexts/AdminProvider";
-import ImoveisTipo from "../pages/ImoveisTipo";
+import ImoveisTipo from './../pages/ImoveisTipo';
 import Locatarios from "../pages/Locatarios";
 import Usuarios from "../pages/Usuarios";
 import Imoveis from "../pages/Imoveis";
@@ -17,7 +17,6 @@ const Rotas = () => {
         <BrowserRouter>
             <Routes>
                 <Route path="/" element={<Login />} />
-          
                 {
                     token && (
                         <Route path="/painel" element={<RotaProtegida><PageLayout /></RotaProtegida>}>
@@ -28,16 +27,16 @@ const Rotas = () => {
                             <Route path="usuarios" element={<Usuarios />} />
                             <Route path="imoveis" element={<Imoveis />} />
                         </Route>
-                )
-            }
-            <Route path="*" element={<VoltarPraLogin />} />
+                    )
+                }
+                <Route path="*" element={<VoltarPraLogin />} />
             </Routes>
-        </BrowserRouter>
-     );
+        </BrowserRouter>    
+    );
 }
 
 const VoltarPraLogin = () => {
     return <Navigate to="/" />
 }
- 
+
 export default Rotas;

@@ -2,9 +2,10 @@ import { App, Button, Drawer, Form, Image, Input, Popconfirm, Table } from "antd
 import { LuImageOff, LuPencil, LuPlus, LuTrash2 } from "react-icons/lu";
 import { useBuscarImovel, useCriarImovel, useDeletarImovel, useEditarImovel } from "../hooks/imoveisHooks";
 import { useState } from "react";
-import { useBuscarImoveisTipo } from "../hooks/imoveisTipoHooks";
-import { useBuscarLocatario } from "../hooks/locatariosHooks";
+import { useBuscarImoveisTipo } from './../hooks/imoveisTipoHooks';
+import { useBuscarLocatario } from './../hooks/locatariosHooks';
 import { APIURL } from "../services";
+
 
 const Imoveis = () => {
 
@@ -14,21 +15,26 @@ const Imoveis = () => {
     const { data: imoveis, isLoading: loadingImovel } = useBuscarImovel("?tipo=true&locatario=true");
     const { data: tipos } = useBuscarImoveisTipo();
     const { data: locatarios } = useBuscarLocatario();
-    const { mutate: criarNivel, isLoading: loadingCriar} = useCriarImovel();
-    const { mutate: editarNivel, isLoading: loadingEditar} = useEditarImovel();
-    const { mutate: deletarNivel } = useDeletarImovel();
+    const { mutate: criarImovel, isLoading: loadingCriar } = useCriarImovel();
+    const { mutate: editarImovel, isLoading: loadingEditar } = useEditarImovel();
+    const { mutate: deletarImovel } = useDeletarImovel();
     const [formEditar] = Form.useForm();
-    
-    function criar(dados){
-        criarNivel(dados, {
+
+    function criar(dados) {
+    }
+
+    function editar(dados) {
+    }
+
+    function deletar(id) {
+        deletarImovel(id, {
             onSuccess: ({ type, description }) => {
-                setMostrarCriar(false);
                 notification[type]({
                     description,
                     placement: "bottomRight"
                 })
             },
-            onError: ({ response: { data: { type, description} } }) => {
+            onError: ({ response: { data: { type, description } } }) => {
                 notification[type]({
                     description
                 });
@@ -36,43 +42,10 @@ const Imoveis = () => {
         })
     }
 
-function editar({dados}){
-        editarNivel(dados, {
-            onSuccess: ({ type, description }) => {
-                setMostrarEditar(false);
-                notification[type]({
-                    description,
-                    placement: "bottomRight"
-                })
-            },
-            onError: ({ response: { data: { type, description} } }) => {
-                notification[type]({
-                    description
-                });
-            }
-        })
-    }
-
-    function deletar(id){
-        deletarNivel(id, {
-            onSuccess: ({ type, description }) => {
-                notification[type]({
-                    description,
-                    placement: "bottomRight"
-                })
-            },
-            onError: ({ response: { data: { type, description} } }) => {
-                notification[type]({
-                    description
-                });
-            }
-        })
-    }
-
-    return ( 
+    return (
         <div>
             <div className="flex justify-between items-center mb-4">
-                <h2 className="text-3-1 font-bold">Imóveis</h2>
+                <h2 className="text-3xl font-bold">Imóveis</h2>
                 <Button
                     type="primary"
                     icon={<LuPlus />}
@@ -81,61 +54,59 @@ function editar({dados}){
             </div>
 
             <div>
-                <Table 
+                <Table
                     dataSource={imoveis || []}
-                    loading = {loadingImovel}
+                    loading={loadingImovel}
                     rowKey={"id"}
                 >
-                    <Table.Column 
+                    <Table.Column
                         title="Foto"
                         render={(_, linha) => {
-                                return linha.imagem ? (
-                                    <Image
-                                        whidth={80}
-                                        height={60}
-                                        className="object-contain"
-                                        src={`${APIURL}${linha?.imagem}`}
-                                    />
-                                ) : ( 
-                                    <div className="w-20 h-15 bg-slate-300 flex justify-center items-center">
-                                        <LuImageOff />
-                                    </div>
-                                )
-                            }
-                        }
+                            return linha.imagem ? (
+                                <Image
+                                    width={80}
+                                    height={60}
+                                    className="object-contain"
+                                    src={`${APIURL}${linha?.imagem}`}
+                                />
+                            ) : (
+                                <div className="w-20 h-15 bg-slate-300 flex justify-center items-center">
+                                    <LuImageOff />
+                                </div>
+                            )
+                        }}
                     />
-                    <Table.Column 
+                    <Table.Column
                         title="Endereço"
                         render={(_, linha) => (
                             `${linha.logradouro} ${linha.numero} ${linha.complemento ? linha.complemento : ""}, ${linha.bairro}, ${linha.cidade}-${linha.estado}`
                         )}
                     />
-                    <Table.Column 
+                    <Table.Column
                         title="Quartos"
                         dataIndex="quartos"
                         align="center"
                     />
-                    <Table.Column 
+                    <Table.Column
                         title="Banheiros"
                         dataIndex="banheiros"
                         align="center"
                     />
-                    <Table.Column 
+                    <Table.Column
                         title="Garagens"
                         render={(_, linha) => linha.garagens ?? "---"}
                         align="center"
                     />
-                    <Table.Column 
+                    <Table.Column
                         title="Tipo"
                         dataIndex={["imoveis_tipo", "nome"]}
                         align="center"
                     />
-                    <Table.Column 
+                    <Table.Column
                         title="Locatário"
                         render={(_, linha) => (linha.locatario ? linha.locatario.nome : "Disponível")}
                         align="center"
                     />
-
                     <Table.Column
                         title="Ações"
                         className="w-25"
@@ -151,20 +122,19 @@ function editar({dados}){
                                     }}
                                 />
                                 <Popconfirm
-                                    tittle="Aviso:"
+                                    title="Aviso:"
                                     description="Deseja realmente apagar?"
                                     okText="Sim"
                                     cancelText="Não"
                                     onConfirm={() => deletar(linha.id)}
                                 >
-                                    <Button 
+                                    <Button
                                         icon={<LuTrash2 />}
                                         type="primary"
                                     />
-
                                 </Popconfirm>
                             </div>
-                        )} 
+                        )}
                     />
                 </Table>
             </div>
@@ -181,7 +151,7 @@ function editar({dados}){
                     <Form.Item
                         label="Nome"
                         name="nome"
-                        rules={[{ required: true, message: "Campo obrigatório " }]}
+                        rules={[{ required: true, message: "Campo obrigatório" }]}
                     >
                         <Input placeholder="nome do nível" />
                     </Form.Item>
@@ -195,7 +165,7 @@ function editar({dados}){
                         </Button>
                     </div>
                 </Form>
-            </Drawer>      
+            </Drawer>
 
             <Drawer
                 title="Editar"
@@ -207,7 +177,6 @@ function editar({dados}){
                     onFinish={editar}
                     form={formEditar}
                 >
-
                     <Form.Item
                         name="id"
                         hidden
@@ -217,7 +186,7 @@ function editar({dados}){
                     <Form.Item
                         label="Nome"
                         name="nome"
-                        rules={[{ required: true, message: "Campo obrigatório " }]}
+                        rules={[{ required: true, message: "Campo obrigatório" }]}
                     >
                         <Input placeholder="nome do nível" />
                     </Form.Item>
@@ -231,9 +200,9 @@ function editar({dados}){
                         </Button>
                     </div>
                 </Form>
-            </Drawer>       
+            </Drawer>
         </div>
     );
 }
- 
+
 export default Imoveis;

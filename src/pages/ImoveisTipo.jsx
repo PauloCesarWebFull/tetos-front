@@ -3,19 +3,20 @@ import { LuPencil, LuPlus, LuTrash2 } from "react-icons/lu";
 import { useBuscarImoveisTipo, useCriarImoveisTipo, useDeletarImoveisTipo, useEditarImoveisTipo } from "../hooks/imoveisTipoHooks";
 import { useState } from "react";
 
+
 const ImoveisTipo = () => {
 
     const [mostrarCriar, setMostrarCriar] = useState(false);
     const [mostrarEditar, setMostrarEditar] = useState(false);
     const { notification } = App.useApp();
     const { data: tipos, isLoading: loadingImoveisTipo } = useBuscarImoveisTipo();
-    const { mutate: criarNivel, isLoading: loadingCriar} = useCriarImoveisTipo();
-    const { mutate: editarNivel, isLoading: loadingEditar} = useEditarImoveisTipo();
-    const { mutate: deletarNivel } = useDeletarImoveisTipo();
+    const { mutate: criarImoveisTipo, isLoading: loadingCriar } = useCriarImoveisTipo();
+    const { mutate: editarImoveisTipo, isLoading: loadingEditar } = useEditarImoveisTipo();
+    const { mutate: deletarImoveisTipo } = useDeletarImoveisTipo();
     const [formEditar] = Form.useForm();
-    
+
     function criar(dados){
-        criarNivel(dados, {
+        criarImoveisTipo(dados, {
             onSuccess: ({ type, description }) => {
                 setMostrarCriar(false);
                 notification[type]({
@@ -23,7 +24,7 @@ const ImoveisTipo = () => {
                     placement: "bottomRight"
                 })
             },
-            onError: ({ response: { data: { type, description} } }) => {
+            onError: ({ response: { data: { type, description } } }) => {
                 notification[type]({
                     description
                 });
@@ -31,8 +32,8 @@ const ImoveisTipo = () => {
         })
     }
 
-function editar({dados}){
-        editarNivel(dados, {
+    function editar(dados){
+        editarImoveisTipo(dados, {
             onSuccess: ({ type, description }) => {
                 setMostrarEditar(false);
                 notification[type]({
@@ -40,7 +41,7 @@ function editar({dados}){
                     placement: "bottomRight"
                 })
             },
-            onError: ({ response: { data: { type, description} } }) => {
+            onError: ({ response: { data: { type, description } } }) => {
                 notification[type]({
                     description
                 });
@@ -49,14 +50,14 @@ function editar({dados}){
     }
 
     function deletar(id){
-        deletarNivel(id, {
+        deletarImoveisTipo(id, {
             onSuccess: ({ type, description }) => {
                 notification[type]({
                     description,
                     placement: "bottomRight"
                 })
             },
-            onError: ({ response: { data: { type, description} } }) => {
+            onError: ({ response: { data: { type, description } } }) => {
                 notification[type]({
                     description
                 });
@@ -64,10 +65,10 @@ function editar({dados}){
         })
     }
 
-    return ( 
+    return (
         <div>
             <div className="flex justify-between items-center mb-4">
-                <h2 className="text-3-1 font-bold">Tipos de imóvel</h2>
+                <h2 className="text-3xl font-bold">Tipos de imóvel</h2>
                 <Button
                     type="primary"
                     icon={<LuPlus />}
@@ -76,12 +77,12 @@ function editar({dados}){
             </div>
 
             <div>
-                <Table 
+                <Table
                     dataSource={tipos || []}
-                    loading = {loadingImoveisTipo}
+                    loading={loadingImoveisTipo}
                     rowKey={"id"}
                 >
-                    <Table.Column 
+                    <Table.Column
                         title="Nome"
                         dataIndex="nome"
                     />
@@ -100,20 +101,19 @@ function editar({dados}){
                                     }}
                                 />
                                 <Popconfirm
-                                    tittle="Aviso:"
+                                    title="Aviso:"
                                     description="Deseja realmente apagar?"
                                     okText="Sim"
                                     cancelText="Não"
                                     onConfirm={() => deletar(linha.id)}
                                 >
-                                    <Button 
+                                    <Button
                                         icon={<LuTrash2 />}
                                         type="primary"
                                     />
-
                                 </Popconfirm>
                             </div>
-                        )} 
+                        )}
                     />
                 </Table>
             </div>
@@ -130,7 +130,7 @@ function editar({dados}){
                     <Form.Item
                         label="Nome"
                         name="nome"
-                        rules={[{ required: true, message: "Campo obrigatório " }]}
+                        rules={[{ required: true, message: "Campo obrigatório" }]}
                     >
                         <Input placeholder="nome do nível" />
                     </Form.Item>
@@ -144,7 +144,7 @@ function editar({dados}){
                         </Button>
                     </div>
                 </Form>
-            </Drawer>      
+            </Drawer>
 
             <Drawer
                 title="Editar"
@@ -156,7 +156,6 @@ function editar({dados}){
                     onFinish={editar}
                     form={formEditar}
                 >
-
                     <Form.Item
                         name="id"
                         hidden
@@ -166,7 +165,7 @@ function editar({dados}){
                     <Form.Item
                         label="Nome"
                         name="nome"
-                        rules={[{ required: true, message: "Campo obrigatório " }]}
+                        rules={[{ required: true, message: "Campo obrigatório" }]}
                     >
                         <Input placeholder="nome do nível" />
                     </Form.Item>
@@ -180,9 +179,9 @@ function editar({dados}){
                         </Button>
                     </div>
                 </Form>
-            </Drawer>       
+            </Drawer>
         </div>
     );
 }
- 
+
 export default ImoveisTipo;
